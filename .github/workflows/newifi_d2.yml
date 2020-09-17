@@ -56,15 +56,11 @@ jobs:
           rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusicGo/
           rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusic/
           rm -rf ./tmp/lede/package/lean/luci-app-unblockmusic/
-          rm -rf ./tmp/lede/package/lean/k3screenctrl/
           cd ./tmp/lede/package/third/
-          git clone https://github.com/lwz322/luci-app-k3screenctrl.git
-          git clone https://github.com/lwz322/k3screenctrl_build.git
           git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic.git
           git clone https://github.com/tty228/luci-app-serverchan.git
           git clone https://github.com/fw876/helloworld.git
           git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
-          sed -i 's/@TARGET_bcm53xx_DEVICE_phicomm-k3/@TARGET_bcm53xx_generic_DEVICE_phicomm-k3/g' ./k3screenctrl_build/Makefile
       - name: update feeds
         run: |
           ./tmp/lede/scripts/feeds update -a
