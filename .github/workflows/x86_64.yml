@@ -1,0 +1,178 @@
+name: build x86_64
+#┌───────────── minute (0 - 59)
+#│ ┌───────────── hour (0 - 23)
+#│ │ ┌───────────── day of the month (1 - 31)
+#│ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+#│ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+#│ │ │ │ │
+#│ │ │ │ │
+#│ │ │ │ │
+#* * * * *
+on:
+  schedule:
+    - cron: 0 0 1 * *
+  push:
+    tags:
+      - "v*"
+jobs:
+  build_luci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: master
+          fetch-depth: 0
+          lfs: true
+      - name: set git identity
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - name: space cleanup
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          docker rmi `docker images -q`
+          sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
+          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php* android*
+          sudo -E apt-get update
+          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
+          # sudo mkdir -p -m 777 /mnt/openwrt/bin /mnt/openwrt/build_dir/host /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir
+          # ln -s /mnt/openwrt/bin ./bin
+          # mkdir -p ./build_dir
+          # ln -s -f /mnt/openwrt/build_dir/host ./build_dir/host
+          # ln -s -f /mnt/openwrt/build_dir/hostpkg ./build_dir/hostpkg
+          # ln -s /mnt/openwrt/dl ./dl
+          # ln -s /mnt/openwrt/feeds ./feeds
+          # ln -s /mnt/openwrt/staging_dir ./staging_dir
+          df -h
+      - name: load latest version
+        run: |
+          git clone https://github.com/coolsnowwolf/lede.git --depth=1 ./tmp/lede
+          mkdir -p ./tmp/lede/package/third/
+          rm -rf ./tmp/lede/package/lean/luci-theme-argon/
+          rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusicGo/
+          rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusic/
+          rm -rf ./tmp/lede/package/lean/luci-app-unblockmusic/
+          rm -rf ./tmp/lede/package/lean/k3screenctrl/
+          cd ./tmp/lede/package/third/
+          git clone https://github.com/lwz322/luci-app-k3screenctrl.git
+          git clone https://github.com/lwz322/k3screenctrl_build.git
+          git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic.git
+          git clone https://github.com/tty228/luci-app-serverchan.git
+          git clone https://github.com/fw876/helloworld.git
+          git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
+          sed -i 's/@TARGET_bcm53xx_DEVICE_phicomm-k3/@TARGET_bcm53xx_generic_DEVICE_phicomm-k3/g' ./k3screenctrl_build/Makefile
+      - name: update feeds
+        run: |
+          ./tmp/lede/scripts/feeds update -a
+          ./tmp/lede/scripts/feeds install -a
+      - name: generate configuration file for x86_64
+        run: |
+          cd ./tmp/lede
+          rm -f ./.config*
+          touch ./.config
+          #
+          # build x86_64
+          cat >> .config <<EOF
+          CONFIG_TARGET_x86=y
+          CONFIG_TARGET_x86_64=y
+          #
+          # Extra packages
+          #
+          CONFIG_PACKAGE_automount=y
+          CONFIG_PACKAGE_autosamba=y
+          CONFIG_PACKAGE_ipv6helper=y
+          #
+          # 3. Applications
+          #
+          CONFIG_PACKAGE_luci-app-adbyby-plus=y
+          CONFIG_PACKAGE_luci-app-aria2=y
+          CONFIG_PACKAGE_luci-app-baidupcs-web=y
+          CONFIG_PACKAGE_luci-app-docker=y
+          CONFIG_PACKAGE_luci-app-familycloud=y
+          CONFIG_PACKAGE_luci-app-mwan3=y
+          CONFIG_PACKAGE_luci-app-mwan3helper=y
+          CONFIG_PACKAGE_luci-app-netdata=y
+          CONFIG_PACKAGE_luci-app-nps=y
+          CONFIG_PACKAGE_luci-app-serverchan=y
+          CONFIG_PACKAGE_luci-app-ssr-plus=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray_plugin=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Trojan=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_NaiveProxy=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Redsocks2=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Kcptun=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Server=y
+          CONFIG_PACKAGE_luci-app-syncdial=y
+          CONFIG_PACKAGE_luci-app-unblockneteasemusic=y
+          CONFIG_PACKAGE_luci-app-usb-printer=y
+          #
+          # 4. Themes
+          #
+          CONFIG_PACKAGE_luci-theme-argon=y
+          #
+          # IP Addresses and Names
+          #
+          CONFIG_PACKAGE_ddns-scripts=y
+          CONFIG_PACKAGE_ddns-scripts_aliyun=y
+          CONFIG_PACKAGE_ddns-scripts_cloudflare.com-v4=y
+          CONFIG_PACKAGE_ddns-scripts_dnspod=y
+          CONFIG_PACKAGE_ddns-scripts_freedns_42_pl=y
+          CONFIG_PACKAGE_ddns-scripts_godaddy.com-v1=y
+          CONFIG_PACKAGE_ddns-scripts_no-ip_com=y
+          CONFIG_PACKAGE_ddns-scripts_nsupdate=y
+          CONFIG_PACKAGE_ddns-scripts_route53-v1=y
+          #
+          # USB Support
+          #
+          CONFIG_PACKAGE_kmod-usb3=y
+          EOF
+          sed -i 's/^[ \t]*//g' ./.config
+          make defconfig
+      - name: make download
+        run: |
+          cd ./tmp/lede
+          make download -j8 || make download -j1 V=s
+          rm -rf $(find ./dl/ -size -1024c)
+          df -h
+      - name: compile firmware
+        run: |
+          cd ./tmp/lede
+          make -j$(nproc) || make -j1 V=s
+          echo "======================="
+          echo "Space usage:"
+          echo "======================="
+          df -h
+          echo "======================="
+          du -h ./ --max-depth=1
+          du -h /mnt/openwrt/ --max-depth=1 || true
+      - name: prepare artifact
+        run: |
+          cd ./tmp/lede
+          mkdir -p ./artifact/firmware
+          mkdir -p ./artifact/package
+          mkdir -p ./artifact/buildinfo
+          rm -rf $(find ./bin/targets/ -type d -name "packages")
+          cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+          cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+      - name: deliver buildinfo
+        uses: actions/upload-artifact@v2
+        with:
+          name: OpenWrt_buildinfo
+          path: ./tmp/lede/artifact/buildinfo/
+
+      - name: deliver package
+        uses: actions/upload-artifact@v2
+        with:
+          name: OpenWrt_package
+          path: ./tmp/lede/artifact/package/
+
+      - name: deliver firmware
+        uses: actions/upload-artifact@v2
+        with:
+          name: OpenWrt_firmware
+          path: ./tmp/lede/bin/targets/
