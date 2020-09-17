@@ -1,4 +1,4 @@
-name: build k3
+name: build redmi_ac2100
 #┌───────────── minute (0 - 59)
 #│ ┌───────────── hour (0 - 23)
 #│ │ ┌───────────── day of the month (1 - 31)
@@ -69,17 +69,17 @@ jobs:
         run: |
           ./tmp/lede/scripts/feeds update -a
           ./tmp/lede/scripts/feeds install -a
-      - name: generate configuration file for k3
+      - name: generate configuration file for redmi_ac2100
         run: |
           cd ./tmp/lede
           rm -f ./.config*
           touch ./.config
           #
-          # build k3
+          # build redmi_ac2100
           cat >> .config <<EOF
-          CONFIG_TARGET_bcm53xx=y
-          CONFIG_TARGET_bcm53xx_generic=y
-          CONFIG_TARGET_bcm53xx_generic_DEVICE_phicomm-k3=y
+          CONFIG_TARGET_ramips=y
+          CONFIG_TARGET_ramips_mt7621=y
+          CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_redmi-router-ac2100=y
           #
           # Extra package
           CONFIG_PACKAGE_automount=y
@@ -89,16 +89,12 @@ jobs:
           # 3. Applications
           #
           CONFIG_PACKAGE_luci-app-adbyby-plus=y
-          CONFIG_PACKAGE_luci-app-aria2=y
-          CONFIG_PACKAGE_luci-app-baidupcs-web=y
-          CONFIG_PACKAGE_luci-app-familycloud=y
           CONFIG_PACKAGE_luci-app-mwan3=y
           CONFIG_PACKAGE_luci-app-mwan3helper=y
           CONFIG_PACKAGE_luci-app-netdata=y
           CONFIG_PACKAGE_luci-app-nps=y
           CONFIG_PACKAGE_luci-app-serverchan=y
           CONFIG_PACKAGE_luci-app-ssr-plus=y
-          CONFIG_PACKAGE_luci-app-k3screenctrl=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray_plugin=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Trojan=y
