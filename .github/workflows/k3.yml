@@ -150,7 +150,7 @@ jobs:
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
           rm -rf $(find ./bin/targets/ -type d -name "packages")
-          cp -rf $(find ./bin/targets/ -type f -name "*k3*") ./artifact/firmware/
+          cp -rf $(find ./bin/targets/ -type f -name "*phicomm-k3-squashfs.trx") ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
       - name: deliver buildinfo
@@ -170,3 +170,14 @@ jobs:
         with:
           name: OpenWrt_firmware
           path: ./tmp/lede/bin/targets/
+      - name: create release and upload asset
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: tmp/lede/artifact/firmware/*
+          file_glob: true
+          tag: "v0.0.1"
+          overwrite: true
+          body: |
+            [bot] automatically publish packages compiled with the latest source code
+            [bot] this tag will always be up to date

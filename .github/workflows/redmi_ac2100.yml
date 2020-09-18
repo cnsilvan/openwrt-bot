@@ -163,3 +163,14 @@ jobs:
         with:
           name: OpenWrt_firmware
           path: ./tmp/lede/bin/targets/
+      - name: create release and upload asset
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: tmp/lede/artifact/firmware/*
+          file_glob: true
+          tag: "v0.0.1"
+          overwrite: true
+          body: |
+            [bot] automatically publish packages compiled with the latest source code
+            [bot] this tag will always be up to date
