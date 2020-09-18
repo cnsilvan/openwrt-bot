@@ -13,7 +13,7 @@ on:
     - cron: 0 0 1 * *
   push:
     tags:
-      - "v*"
+      - "newifi*"
 jobs:
   build_luci:
     runs-on: ubuntu-latest
@@ -146,6 +146,7 @@ jobs:
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
           rm -rf $(find ./bin/targets/ -type d -name "packages")
+          find ./bin/targets/ -type f
           cp -rf $(find ./bin/targets/ -type f -name "*squashfs-sysupgrade.bin") ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
