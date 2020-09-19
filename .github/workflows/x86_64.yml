@@ -31,48 +31,16 @@ jobs:
       - name: space cleanup
         env:
           DEBIAN_FRONTEND: noninteractive
-        run: |
-          docker rmi `docker images -q`
-          sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
-          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php* android*
-          sudo -E apt-get update
-          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig
-          sudo -E apt-get -y autoremove --purge
-          sudo -E apt-get clean
-          # sudo mkdir -p -m 777 /mnt/openwrt/bin /mnt/openwrt/build_dir/host /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir
-          # ln -s /mnt/openwrt/bin ./bin
-          # mkdir -p ./build_dir
-          # ln -s -f /mnt/openwrt/build_dir/host ./build_dir/host
-          # ln -s -f /mnt/openwrt/build_dir/hostpkg ./build_dir/hostpkg
-          # ln -s /mnt/openwrt/dl ./dl
-          # ln -s /mnt/openwrt/feeds ./feeds
-          # ln -s /mnt/openwrt/staging_dir ./staging_dir
-          df -h
+        run: ./install_ev.sh
       - name: load latest version
-        run: |
-          git clone https://github.com/coolsnowwolf/lede.git --depth=1 ./tmp/lede
-          mkdir -p ./tmp/lede/package/third/
-          rm -rf ./tmp/lede/package/lean/luci-theme-argon/
-          rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusicGo/
-          rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusic/
-          rm -rf ./tmp/lede/package/lean/luci-app-unblockmusic/
-          cd ./tmp/lede/package/third/
-          git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic.git
-          git clone https://github.com/tty228/luci-app-serverchan.git
-          git clone https://github.com/fw876/helloworld.git
-          git clone https://github.com/lisaac/luci-app-dockerman.git
-          git clone https://github.com/frainzy1477/luci-app-clash.git
-          git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
-          pushd luci-app-clash/tools/po2lmo
-          make && sudo -E make install
-          popd
-          po2lmo ./luci-app-clash/po/zh-cn/clash.po ./luci-app-clash/po/zh-cn/clash.zh-cn.lmo
+        run: ./common_load_lastest_version.sh
       - name: update feeds
         run: |
           ./tmp/lede/scripts/feeds update -a
           ./tmp/lede/scripts/feeds install -a
       - name: generate configuration file for x86_64
         run: |
+          cp common.config ./tmp/lede/common.cfg
           cd ./tmp/lede
           rm -f ./.config*
           touch ./.config
@@ -86,7 +54,6 @@ jobs:
           #
           CONFIG_PACKAGE_automount=y
           CONFIG_PACKAGE_autosamba=y
-          CONFIG_PACKAGE_ipv6helper=y
           #
           # 2. Clash For OpenWRT
           #
@@ -94,8 +61,7 @@ jobs:
           #
           # 3. Applications
           #
-          CONFIG_PACKAGE_iperf3=y
-          CONFIG_PACKAGE_luci-app-adbyby-plus=y
+          CONFIG_PACKAGE_iperf3-ssl=y
           CONFIG_PACKAGE_luci-app-aria2=y
           CONFIG_PACKAGE_luci-app-baidupcs-web=y
           CONFIG_PACKAGE_luci-app-docker=y
@@ -103,41 +69,13 @@ jobs:
           CONFIG_PACKAGE_luci-app-kodexplorer=y
           CONFIG_PACKAGE_luci-app-ttyd=y
           CONFIG_PACKAGE_luci-app-familycloud=y
-          CONFIG_PACKAGE_luci-app-mwan3=y
-          CONFIG_PACKAGE_luci-app-mwan3helper=y
-          CONFIG_PACKAGE_luci-app-serverchan=y
-          CONFIG_PACKAGE_luci-app-ssr-plus=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray_plugin=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Trojan=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_NaiveProxy=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Redsocks2=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Kcptun=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Server=y
-          CONFIG_PACKAGE_luci-app-syncdial=y
-          CONFIG_PACKAGE_luci-app-unblockneteasemusic=y
           CONFIG_PACKAGE_luci-app-usb-printer=y
-          #
-          # 4. Themes
-          #
-          CONFIG_PACKAGE_luci-theme-argon=y
-          #
-          # IP Addresses and Names
-          #
-          CONFIG_PACKAGE_ddns-scripts=y
-          CONFIG_PACKAGE_ddns-scripts_aliyun=y
-          CONFIG_PACKAGE_ddns-scripts_cloudflare.com-v4=y
-          CONFIG_PACKAGE_ddns-scripts_dnspod=y
-          CONFIG_PACKAGE_ddns-scripts_freedns_42_pl=y
-          CONFIG_PACKAGE_ddns-scripts_godaddy.com-v1=y
-          CONFIG_PACKAGE_ddns-scripts_no-ip_com=y
-          CONFIG_PACKAGE_ddns-scripts_nsupdate=y
-          CONFIG_PACKAGE_ddns-scripts_route53-v1=y
           #
           # USB Support
           #
           CONFIG_PACKAGE_kmod-usb3=y
           EOF
+          cat common.cfg >> ./.config
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
       - name: make download
