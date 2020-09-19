@@ -78,8 +78,6 @@ jobs:
           CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_redmi-router-ac2100=y
           #
           # Extra package
-          CONFIG_PACKAGE_automount=y
-          CONFIG_PACKAGE_autosamba=y
           CONFIG_PACKAGE_ipv6helper=y
           #
           # 3. Applications
