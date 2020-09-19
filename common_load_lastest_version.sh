@@ -1,3 +1,4 @@
+#!/bin/bash
 git clone https://github.com/coolsnowwolf/lede.git --depth=1 ./tmp/lede
 mkdir -p ./tmp/lede/package/third/
 rm -rf ./tmp/lede/package/lean/luci-theme-argon/
