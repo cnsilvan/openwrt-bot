@@ -31,9 +31,9 @@ jobs:
       - name: space cleanup
         env:
           DEBIAN_FRONTEND: noninteractive
-        run: ./install_ev.sh
+        run: sh ./install_ev.sh
       - name: load latest version
-        run: ./common_load_lastest_version.sh
+        run: sh ./common_load_lastest_version.sh
       - name: update feeds
         run: |
           ./tmp/lede/scripts/feeds update -a
