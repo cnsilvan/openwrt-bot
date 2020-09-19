@@ -90,8 +90,6 @@ jobs:
           CONFIG_PACKAGE_luci-app-familycloud=y
           CONFIG_PACKAGE_luci-app-mwan3=y
           CONFIG_PACKAGE_luci-app-mwan3helper=y
-          CONFIG_PACKAGE_luci-app-netdata=y
-          CONFIG_PACKAGE_luci-app-nps=y
           CONFIG_PACKAGE_luci-app-serverchan=y
           CONFIG_PACKAGE_luci-app-ssr-plus=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray_plugin=y

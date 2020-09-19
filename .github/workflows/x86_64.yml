@@ -60,7 +60,13 @@ jobs:
           git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic.git
           git clone https://github.com/tty228/luci-app-serverchan.git
           git clone https://github.com/fw876/helloworld.git
+          git clone https://github.com/lisaac/luci-app-dockerman.git
+          git clone https://github.com/frainzy1477/luci-app-clash.git
           git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
+          pushd luci-app-clash/tools/po2lmo
+          make && sudo -E make install
+          popd
+          po2lmo ./luci-app-clash/po/zh-cn/clash.po ./luci-app-clash/po/zh-cn/clash.zh-cn.lmo
       - name: update feeds
         run: |
           ./tmp/lede/scripts/feeds update -a
@@ -82,17 +88,22 @@ jobs:
           CONFIG_PACKAGE_autosamba=y
           CONFIG_PACKAGE_ipv6helper=y
           #
+          # 2. Clash For OpenWRT
+          #
+          CONFIG_PACKAGE_luci-app-clash=y
+          #
           # 3. Applications
           #
           CONFIG_PACKAGE_luci-app-adbyby-plus=y
           CONFIG_PACKAGE_luci-app-aria2=y
           CONFIG_PACKAGE_luci-app-baidupcs-web=y
           CONFIG_PACKAGE_luci-app-docker=y
+          CONFIG_PACKAGE_luci-app-dockerman=y
+          CONFIG_PACKAGE_luci-app-kodexplorer=y
+          CONFIG_PACKAGE_luci-app-ttyd=y
           CONFIG_PACKAGE_luci-app-familycloud=y
           CONFIG_PACKAGE_luci-app-mwan3=y
           CONFIG_PACKAGE_luci-app-mwan3helper=y
-          CONFIG_PACKAGE_luci-app-netdata=y
-          CONFIG_PACKAGE_luci-app-nps=y
           CONFIG_PACKAGE_luci-app-serverchan=y
           CONFIG_PACKAGE_luci-app-ssr-plus=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray_plugin=y
