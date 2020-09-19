@@ -94,6 +94,7 @@ jobs:
           #
           # 3. Applications
           #
+          CONFIG_PACKAGE_iperf3=y
           CONFIG_PACKAGE_luci-app-adbyby-plus=y
           CONFIG_PACKAGE_luci-app-aria2=y
           CONFIG_PACKAGE_luci-app-baidupcs-web=y
