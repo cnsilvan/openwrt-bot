@@ -1,5 +1,3 @@
-pushd /usr/share
-popd
 docker rmi `docker images -q`
 sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
 sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php* android*
