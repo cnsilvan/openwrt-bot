@@ -84,6 +84,7 @@ jobs:
           du -h ./ --max-depth=1
           du -h /mnt/openwrt/ --max-depth=1 || true
       - name: prepare artifact
+        id: prepare
         run: |
           cd ./tmp/lede
           mkdir -p ./artifact/firmware
@@ -125,4 +126,4 @@ jobs:
           body: |
             [bot] automatically publish packages compiled with the latest source code
             [bot] this tag will always be up to date
-            [bot] latest build time : ${{ steps.date.outputs.buildTime }}
+            [bot] latest build time : ${{ steps.prepare.outputs.buildTime }}
