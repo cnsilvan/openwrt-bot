@@ -106,7 +106,7 @@ jobs:
           cp -rf $(find ./bin/targets/ -type f -name "*generic-squashfs-combined.img") ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
-          echo "::set-output name=buildTime::$(date '+%Y%m%d-%H%M%S')"
+          echo "::set-output name=buildTime::$(date '+%Y-%m-%d %H:%M:%S')"
       - name: deliver buildinfo
         uses: actions/upload-artifact@v2
         with:
