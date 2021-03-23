@@ -5,3 +5,6 @@ automatically generate customized firmware by actions
 ## open IPv6 correctly
 
 Edit `Network->Load Balancing->Policies` Last resort->default(use main routing table)
+
+## base
+[LEDE](https://github.com/coolsnowwolf/lede)
