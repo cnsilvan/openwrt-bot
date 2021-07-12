@@ -137,4 +137,4 @@ jobs:
           body: |
             [bot] automatically publish packages compiled with the latest source code
             [bot] this tag will always be up to date
-            [bot] latest build time : ${{ steps.prepare.outputs.buildTime }}
+            [bot] first build time : ${{ steps.prepare.outputs.buildTime }}
