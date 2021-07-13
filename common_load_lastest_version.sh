@@ -19,7 +19,3 @@ pushd luci-app-clash/tools/po2lmo
 make && sudo -E make install
 popd
 po2lmo ./luci-app-clash/po/zh-cn/clash.po ./luci-app-clash/po/zh-cn/clash.zh-cn.lmo
-touch ./tmp/lede/body.md
-echo '[bot] automatically publish packages compiled with the latest source code' > ./tmp/lede/body.md
-echo '[bot] this tag will always be up to date' >> ./tmp/lede/body.md
-echo "[bot] latest build time : $(date '+%Y-%m-%d %H:%M:%S')" >> ./tmp/lede/body.md
