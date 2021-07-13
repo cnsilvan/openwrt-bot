@@ -106,7 +106,14 @@ jobs:
           mkdir -p ./artifact/buildinfo
           ls -al
           ls ./artifact/
+          echo "ls ./artifact/firmware"
           ls ./artifact/firmware
+           echo "ls ./bin/targets/"
+          ls ./bin/targets/
+          echo "find ./bin/targets/ -type d -name 'packages'"
+          find ./bin/targets/ -type d -name "packages"
+          echo "find ./bin/targets/ -type f -name "*generic-squashfs-combined.img""
+          find ./bin/targets/ -type f -name "*generic-squashfs-combined.img"
           rm -rf $(find ./bin/targets/ -type d -name "packages")
           cp -rf $(find ./bin/targets/ -type f -name "*generic-squashfs-combined.img") ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
