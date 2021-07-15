@@ -135,6 +135,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "tmp/lede/artifact/firmware/*"
-          tag: "v0.0.1"
           allowUpdates: true
           bodyFile: "tmp/lede/body.md"
