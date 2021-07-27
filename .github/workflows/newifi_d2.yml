@@ -66,6 +66,8 @@ jobs:
           cat common.cfg >> ./.config
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
+          echo "========check config========"
+          cat ./.config
       - name: make download
         run: |
           cd ./tmp/lede
