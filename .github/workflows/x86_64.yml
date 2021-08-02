@@ -44,7 +44,7 @@ jobs:
           cd ./tmp/lede
           rm -f ./.config*
           touch ./.config
-          #
+          # auto
           # build x86_64
           cat >> .config <<EOF
           CONFIG_TARGET_x86=y
