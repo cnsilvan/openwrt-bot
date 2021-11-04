@@ -54,16 +54,22 @@ jobs:
           #
           CONFIG_PACKAGE_automount=y
           CONFIG_PACKAGE_autosamba=y
+          CONFIG_PACKAGE_upx=y
+          CONFIG_PACKAGE_net-snmp=y
           #
           # 2. Clash For OpenWRT
           #
-          CONFIG_PACKAGE_luci-app-clash=y
+          CONFIG_PACKAGE_luci-app-openclash=y
           #
           # 3. Applications
           #
+          # CONFIG_PACKAGE_luci-app-adguardhome=y
           CONFIG_PACKAGE_iperf3-ssl=y
           CONFIG_PACKAGE_luci-app-aria2=y
-          CONFIG_PACKAGE_luci-app-baidupcs-web=y
+          # CONFIG_PACKAGE_luci-app-baidupcs-web=y
+          CONFIG_PACKAGE_luci-app-go-aliyundrive-webdav=y
+          CONFIG_PACKAGE_luci-app-pushbot=y
+          CONFIG_PACKAGE_luci-app-rclone=y
           CONFIG_PACKAGE_luci-app-docker=y
           CONFIG_PACKAGE_luci-app-dockerman=y
           CONFIG_PACKAGE_luci-app-kodexplorer=y
