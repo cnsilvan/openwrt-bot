@@ -34,10 +34,6 @@ jobs:
         run: bash ./install_ev.sh
       - name: load latest version
         run: bash ./common_load_lastest_version.sh
-      - name: update feeds
-        run: |
-          ./tmp/lede/scripts/feeds update -a
-          ./tmp/lede/scripts/feeds install -a
       - name: generate configuration file for x86_64
         run: |
           cp common.config ./tmp/lede/common.cfg

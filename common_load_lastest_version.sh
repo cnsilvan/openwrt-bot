@@ -1,5 +1,8 @@
 #!/bin/bash
 git clone https://github.com/coolsnowwolf/lede.git --depth=1 ./tmp/lede
+echo 'feeds update && install'
+./tmp/lede/scripts/feeds update -a
+./tmp/lede/scripts/feeds install -a
 mkdir -p ./tmp/lede/package/third/
 rm -rf ./tmp/lede/package/lean/luci-theme-argon/
 rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusicGo/
