@@ -1,13 +1,13 @@
 #!/bin/bash
 git clone https://github.com/coolsnowwolf/lede.git --depth=1 ./tmp/lede
-echo 'feeds update && install'
+echo "feeds update & install"
 ./tmp/lede/scripts/feeds update -a
 ./tmp/lede/scripts/feeds install -a
 mkdir -p ./tmp/lede/package/third/
-rm -rf ./tmp/lede/package/lean/luci-theme-argon/
-rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusicGo/
-rm -rf ./tmp/lede/package/lean/UnblockNeteaseMusic/
-rm -rf ./tmp/lede/package/lean/luci-app-unblockmusic/
+rm -rf ./tmp/lede/feeds/packages/multimedia/UnblockNeteaseMusic
+rm -rf ./tmp/lede/feeds/packages/multimedia/UnblockNeteaseMusic-Go
+rm -rf ./tmp/lede/feeds/luci/applications/luci-app-unblockmusic
+rm -rf ./tmp/lede/feeds/luci/themes/luci-theme-argon
 rm -rf ./tmp/lede/package/lean/k3screenctrl/
 cd ./tmp/lede/package/third/
 git clone https://github.com/lwz322/luci-app-k3screenctrl.git
