@@ -16,6 +16,7 @@ git clone https://github.com/cnsilvan/luci-app-unblockneteasemusic.git
 git clone https://github.com/tty228/luci-app-serverchan.git
 git clone https://github.com/fw876/helloworld.git
 git clone https://github.com/lisaac/luci-app-dockerman.git
+git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git
 git clone https://github.com/vernesong/OpenClash.git
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
 pushd OpenClash/luci-app-openclash/tools/po2lmo
