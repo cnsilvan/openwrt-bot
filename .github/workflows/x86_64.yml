@@ -66,8 +66,8 @@ jobs:
           CONFIG_PACKAGE_luci-app-go-aliyundrive-webdav=y
           CONFIG_PACKAGE_luci-app-pushbot=y
           CONFIG_PACKAGE_luci-app-rclone=y
-          CONFIG_PACKAGE_luci-app-docker=y
-          CONFIG_PACKAGE_luci-app-dockerman=y
+          # CONFIG_PACKAGE_luci-app-docker=y
+          # CONFIG_PACKAGE_luci-app-dockerman=y
           CONFIG_PACKAGE_luci-app-kodexplorer=y
           CONFIG_PACKAGE_luci-app-ttyd=y
           CONFIG_PACKAGE_luci-app-familycloud=y
