@@ -60,7 +60,7 @@ jobs:
           # 3. Applications
           #
           # CONFIG_PACKAGE_luci-app-adguardhome=y
-          CONFIG_PACKAGE_iperf3-ssl=y
+          # CONFIG_PACKAGE_iperf3-ssl=y
           CONFIG_PACKAGE_luci-app-aria2=y
           # CONFIG_PACKAGE_luci-app-baidupcs-web=y
           CONFIG_PACKAGE_luci-app-go-aliyundrive-webdav=y
